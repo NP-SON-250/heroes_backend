@@ -6,9 +6,9 @@ const docrouter = express.Router();
 const options = {
   openapi: "3.0.1",
   info: {
-    title: "Congozi Expert API",
+    title: "Heroes Technology API",
     version: "1.0.0",
-    description: "Documentation for Congozi Expert API.",
+    description: "Documentation for Heroes Technology API.",
   },
   basePath: "/",
   components: {
