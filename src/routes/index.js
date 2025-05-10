@@ -1,23 +1,23 @@
 import express from "express";
 import docrouter from "../docs/Docs";
-import userRoute from "./Congozi.users.routes";
-import examRoute from "./Congozi.exams.routes";
-import questionRoute from "./Congozi.questions.routes";
-import optionRoute from "./Congozi.options.routes";
-import accountRoute from "./Congozi.accounts.routes";
-import purchaseRoute from "./Congozi.purchases.routes";
-import unpaidExamRoute from "./Congozi.unpaidexams.routes";
-import unpaidAccountRoute from "./Congozi.unpaidaccounts.routes";
-import totaluserAccountRoute from "./Congozi.totaluseraccounts.routes";
-import totaluserExamRoute from "./Congozi.totaluserexams.routes";
-import passedExamRoute from "./Congozi.passedexams.routes";
-import failedExamRoute from "./Congozi.failledexams.routes";
-import expiredExamRoute from "./Congozi.expiredexams.routes";
-import expiredAccountRoute from "./Congozi.expiredaccounts.routes";
-import waittingAccountRoute from "./Congozi.waittingaccounts.routes";
-import waittingExamRoute from "./Congozi.waittingexams.routes";
-import responsesRoute from "./Congozi.responses.routes";
-import iremboRoute from "./Congozi.irembo.routes";
+import userRoute from "./Heroes.users.routes";
+import examRoute from "./Heroes.exams.routes";
+import questionRoute from "./Heroes.questions.routes";
+import optionRoute from "./Heroes.options.routes";
+import accountRoute from "./Heroes.accounts.routes";
+import purchaseRoute from "./Heroes.purchases.routes";
+import unpaidExamRoute from "./Heroes.unpaidexams.routes";
+import unpaidAccountRoute from "./Heroes.unpaidaccounts.routes";
+import totaluserAccountRoute from "./Heroes.totaluseraccounts.routes";
+import totaluserExamRoute from "./Heroes.totaluserexams.routes";
+import passedExamRoute from "./Heroes.passedexams.routes";
+import failedExamRoute from "./Heroes.failledexams.routes";
+import expiredExamRoute from "./Heroes.expiredexams.routes";
+import expiredAccountRoute from "./Heroes.expiredaccounts.routes";
+import waittingAccountRoute from "./Heroes.waittingaccounts.routes";
+import waittingExamRoute from "./Heroes.waittingexams.routes";
+import responsesRoute from "./Heroes.responses.routes";
+import iremboRoute from "./Heroes.irembo.routes";
 const router = express.Router();
 
 // Route
@@ -42,16 +42,5 @@ router.use("/waittingaccounts", waittingAccountRoute);
 router.use("/expiredaccounts", expiredAccountRoute);
 router.use("/responses", responsesRoute);
 router.use("/irembo", iremboRoute);
-
-
-
-
-
-
-
-
-
-
-
 
 export default router;

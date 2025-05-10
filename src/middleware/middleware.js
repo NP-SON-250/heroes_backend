@@ -1,5 +1,5 @@
 import Jwt from "jsonwebtoken";
-import Users from "../models/Congozi.users.model";
+import Users from "../models/Heroes.users.model";
 
 //students
 export const students = async (req, res, next) => {
