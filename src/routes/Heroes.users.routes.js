@@ -11,6 +11,7 @@ import {
 import fileUpload from "../helper/multer";
 import Users from "../models/Heroes.users.model";
 import { normal } from "../middleware/middleware";
+import bcrypt from "bcrypt";
 const userRoute = express.Router();
 userRoute.post("/", fileUpload.single("profile"), createUsers);
 userRoute.post("/auth", fileUpload.single("password"), login);
