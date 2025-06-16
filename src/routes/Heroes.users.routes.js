@@ -10,6 +10,7 @@ import {
 } from "../controllers/Heroes.users.controllers";
 import fileUpload from "../helper/multer";
 import Users from "../models/Heroes.users.model";
+import { normal } from "../middleware/middleware";
 const userRoute = express.Router();
 userRoute.post("/", fileUpload.single("profile"), createUsers);
 userRoute.post("/auth", fileUpload.single("password"), login);
