@@ -2,11 +2,9 @@ import responsesModel from "../models/Heroes.responses.models";
 import Exams from "../models/Heroes.exams.models";
 import Questions from "../models/Heroes.questions.models";
 import Options from "../models/Heroes.options.models";
-import WaittingExams from "../models/Heroes.waittingexams.models";
 import ExpiredExams from "../models/Heroes.expiredexams.models";
 import PassedExams from "../models/Heroes.passedexams.models";
 import FailledExams from "../models/Heroes.failedexams.models";
-import Purchases from "../models/Heroes.purchases.models";
 
 export const addResponses = async (req, res) => {
   try {
@@ -20,8 +18,6 @@ export const addResponses = async (req, res) => {
         message: "Exam not found",
       });
     }
-
-    // Check if user has responded the same exam and remove record
     const findrespondedRecord = await responsesModel.findOne({
       examId: examId,
       userId: userId,
@@ -31,8 +27,6 @@ export const addResponses = async (req, res) => {
     }
 
     let correctOptionIds = [];
-
-    // Iterate through each response
     for (const response of responses) {
       const { questionId } = response;
 
@@ -45,28 +39,16 @@ export const addResponses = async (req, res) => {
         correctOptionIds.push(correctOption._id);
       }
     }
-
-    // Create the response document
     const savedResponse = await responsesModel.create({
       examId: examId,
       userId: userId,
       correctOptionId: correctOptionIds,
       responses,
     });
-
-    // ===== Now handle waiting, expired, passed/failed =====
-
-    // 1. Delete from waiting model
-    await WaittingExams.deleteOne({ exam: examId, purchasedBy: userId });
-
-    await Purchases.deleteOne({ itemId: examId, purchasedBy: userId });
-    // 2. Insert into ExpiredExams
     await ExpiredExams.create({
       exam: examId,
       purchasedBy: userId,
     });
-
-    // 3. Calculate total points
     let totalPoints = 0;
     for (const response of responses) {
       const selectedOption = await Options.findById(response.selectedOptionId);
@@ -74,8 +56,6 @@ export const addResponses = async (req, res) => {
         totalPoints += 1;
       }
     }
-
-    // 4. Insert into PassedExams or FailledExams
     if (totalPoints >= 12) {
       await PassedExams.create({
         exam: examId,
@@ -147,7 +127,6 @@ export const getUserResponses = async (req, res) => {
             };
           })
         );
-
         return {
           ...exam,
           totalPoints,
@@ -157,7 +136,6 @@ export const getUserResponses = async (req, res) => {
         };
       })
     );
-
     return res.status(200).json({
       status: "200",
       message: "Your responses",
@@ -171,4 +149,21 @@ export const getUserResponses = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+export const deleteResponse = async (req, res) => {
+  const { id } = req.params;
+  const isResponseExist = await responsesModel.findById(id);
+  if (!isResponseExist) {
+    return res.status(404).json({
+      status: "404",
+      message: "Response not found",
+    });
+  }
+  const deletedResponse = await responsesModel.findByIdAndDelete(id);
+  return res.status(200).json({
+    status: "200",
+    message: "Response deleted",
+    data: deletedResponse,
+  });
 };

@@ -13,7 +13,10 @@ import {
   deleteAccessCodePurchase,
 } from "../controllers/Heroes.purchases.controllers";
 import fileUpload from "../helper/multer";
-import { admins, students, schools, normal } from "../middleware/middleware";
+import {
+  normal,
+  supperAdmins,
+} from "../middleware/middleware";
 
 const purchaseRoute = express.Router();
 
@@ -23,7 +26,7 @@ purchaseRoute.get("/pending", normal, getUserPending);
 purchaseRoute.get("/complete", normal, getUserComplete);
 purchaseRoute.get("/user", normal, getUserPurchase);
 purchaseRoute.get("/:purchaseId", normal, getLoggedInUserSinglePurchase);
-purchaseRoute.get("/", normal, getUserAdmin);
+purchaseRoute.get("/", getUserAdmin);
 
 // POST routes
 purchaseRoute.post(
@@ -43,7 +46,7 @@ purchaseRoute.post(
 purchaseRoute.put("/:id", fileUpload.single("status"), updatedPurchase);
 
 // DELETE route
-purchaseRoute.delete("/:purchaseId", normal, deleteLoggedInUserPurchase);
+purchaseRoute.delete("/:purchaseId", supperAdmins, deleteLoggedInUserPurchase);
 purchaseRoute.delete("/access/:accessCode", deleteAccessCodePurchase);
 
 export default purchaseRoute;

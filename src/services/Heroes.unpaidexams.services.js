@@ -1,6 +1,5 @@
 import UnpaidExams from "../models/Heroes.unpaidexams.models";
 
-// Service to get all unpaid exams for a logged-in user
 export const getUserUnpaidExams = async (userId) => {
   try {
     const exams = await UnpaidExams.find({ purchasedBy: userId })
@@ -15,8 +14,6 @@ export const getUserUnpaidExams = async (userId) => {
     throw new Error("Failed to retrieve user unpaid exams");
   }
 };
-
-// Service to get a single unpaid exam for the logged-in user
 export const getSingleUserUnpaidExam = async (userId, id) => {
   try {
     const exam = await UnpaidExams.findOne({

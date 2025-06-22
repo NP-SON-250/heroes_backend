@@ -4,18 +4,15 @@ import ExpiredAccounts from "../models/Heroes.expiredaccounts.models";
 import TotalUserAccounts from "../models/Heroes.totaluseraccounts.models";
 import UnpaidAccounts from "../models/Heroes.unpaidaccounts.models";
 import WaittingAccounts from "../models/Heroes.waittingaccounts.models";
-// Service to create account
+
 export const createAccount = async (accountData) => {
   const { title, validIn, fees, grantedexams } = accountData;
 
   try {
-    // Check if account with same number and same type already exists
     const existingAccount = await Accounts.findOne({ title });
     if (existingAccount) {
       throw new Error("This account already exists");
     }
-
-    // Create the account
     const account = await Accounts.create({
       title,
       fees,
@@ -32,8 +29,6 @@ export const createAccount = async (accountData) => {
     throw new Error(`Error creating account: ${error.message}`);
   }
 };
-
-// Service to update an account
 export const updateAccount = async (id, accountData) => {
   const { title } = accountData;
 
@@ -42,8 +37,6 @@ export const updateAccount = async (id, accountData) => {
     if (!accountExist) {
       throw new Error("Account not found");
     }
-
-    // If number is being updated (but not type)
     if (title) {
       const duplicate = await Accounts.findOne({
         title,
@@ -63,8 +56,6 @@ export const updateAccount = async (id, accountData) => {
     throw new Error(`Error updating account: ${error.message}`);
   }
 };
-
-// Service to delete an account
 export const deleteAccount = async (id) => {
   try {
     const isExist = await Accounts.findById(id);
@@ -97,7 +88,6 @@ export const deleteAccount = async (id) => {
     throw new Error(`Error deleting account: ${error.message}`);
   }
 };
-// Service to get all account
 export const getAllAccount = async () => {
   try {
     const allAccounts = await Accounts.find();
@@ -106,7 +96,6 @@ export const getAllAccount = async () => {
     throw new Error(`Error retrieving account: ${error.message}`);
   }
 };
-// Service to get single account
 export const getAccountById = async (id) => {
   try {
     const isExist = await Accounts.findById(id);

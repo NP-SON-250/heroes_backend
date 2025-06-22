@@ -1,6 +1,5 @@
 import TotalUserAccounts from "../models/Heroes.totaluseraccounts.models";
 
-// Service to get all total user accounts for a logged-in user
 export const getTotalUserAccounts = async (userId) => {
   try {
     const accounts = await TotalUserAccounts.find({ purchasedBy: userId })
@@ -16,7 +15,6 @@ export const getTotalUserAccounts = async (userId) => {
   }
 };
 
-// Service to get a single total user account for the logged-in user
 export const getSingleTotalUserAccounts = async (userId, id) => {
   try {
     const account = await TotalUserAccounts.findOne({

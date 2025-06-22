@@ -1,6 +1,4 @@
 import WaittingExams from "../models/Heroes.waittingexams.models";
-
-// Service to get all waitting exams for a logged-in user
 export const getUserWaittingExams = async (userId) => {
   try {
     const exams = await WaittingExams.find({ purchasedBy: userId })
@@ -15,8 +13,6 @@ export const getUserWaittingExams = async (userId) => {
     throw new Error("Failed to retrieve user waitting exams");
   }
 };
-
-// Service to get a single waitting exam for the logged-in user
 export const getSingleUserWaittingExam = async (userId, id) => {
   try {
     const exam = await WaittingExams.findOne({

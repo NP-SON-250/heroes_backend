@@ -8,7 +8,28 @@ import Users from "../models/Heroes.users.model";
 import bcrypt from "bcrypt";
 import { uploadToCloud } from "../helper/cloud";
 
-// create user controller
+export const updateUser = async (req, res) => {
+  const { error, value } = validateUpdateUser(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  try {
+    const { id } = req.params;
+    const updatedUser = await userService.updateUser(id, value, req.file);
+
+    return res.status(200).json({
+      message: "User updated",
+      data: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "500",
+      message: "Habayemo ikibazo kidasanzwe",
+      error: error.message,
+    });
+  }
+};
 export const createUsers = async (req, res, file) => {
   const {
     fName,
@@ -23,7 +44,6 @@ export const createUsers = async (req, res, file) => {
     tin,
   } = req.body;
   try {
-    // Check if user already exists by email, ID card, tin, companyName, or phone
     if (email) {
       const emailExist = await Users.findOne({ email: email });
       if (emailExist) {
@@ -71,17 +91,12 @@ export const createUsers = async (req, res, file) => {
         });
       }
     }
-    // Upload profile image if file is provided
     let savedProfile;
     if (req.file) {
       const uploadResult = await uploadToCloud(req.file, res);
       savedProfile = uploadResult.secure_url;
     }
-
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Prepare user object
     const newUserData = {
       fName,
       lName,
@@ -94,8 +109,6 @@ export const createUsers = async (req, res, file) => {
       password: hashedPassword,
       profile: savedProfile,
     };
-
-    // Create user
     const user = await Users.create(newUserData);
 
     return res.status(200).json({
@@ -112,29 +125,6 @@ export const createUsers = async (req, res, file) => {
     });
   }
 };
-export const updateUser = async (req, res) => {
-  const { error, value } = validateUpdateUser(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
-
-  try {
-    const { id } = req.params;
-    const updatedUser = await userService.updateUser(id, value, req.file);
-
-    return res.status(200).json({
-      message: "User updated",
-      data: updatedUser,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "500",
-      message: "Habayemo ikibazo kidasanzwe",
-      error: error.message,
-    });
-  }
-};
-// Controller to login function
 export const login = async (req, res) => {
   const { error, value } = validateLoginUser(req.body);
   if (error) {
@@ -157,7 +147,6 @@ export const login = async (req, res) => {
     });
   }
 };
-// Controller to login function by schools
 export const loginSchools = async (req, res) => {
   const { error, value } = validateLoginUser(req.body);
   if (error) {
@@ -226,6 +215,64 @@ export const getUserById = async (req, res) => {
     return res.status(500).json({
       status: "500",
       message: "Habayemo ikibazo kidasanzwe",
+      error: error.message,
+    });
+  }
+};
+
+export const getLastWeekUsersCount = async (req, res) => {
+  try {
+    const today = new Date();
+
+    const startOfLastWeek = new Date(today);
+    startOfLastWeek.setDate(today.getDate() - 14);
+    startOfLastWeek.setHours(0, 0, 0, 0); 
+
+    const endOfLastWeek = new Date(today);
+    endOfLastWeek.setDate(today.getDate() - 7);
+    endOfLastWeek.setHours(23, 59, 59, 999);
+
+    const count = await Users.countDocuments({
+      createdAt: {
+        $gte: startOfLastWeek,
+        $lte: endOfLastWeek,
+      },
+    });
+
+    return res.status(200).json({
+      status: "200",
+      message: "Users created during last week",
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "500",
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getCurrentWeekUsersCount = async (req, res) => {
+  try {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const count = await Users.countDocuments({
+      createdAt: { $gte: oneWeekAgo },
+    });
+
+    return res.status(200).json({
+      status: "200",
+      message: "Current week users counts",
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "500",
+      message: "Internal server error",
       error: error.message,
     });
   }

@@ -1,6 +1,5 @@
 import TotalUserExams from "../models/Heroes.totaluserexams.models";
 
-// Service to get all total user exams for a logged-in user
 export const getTotalUserExams = async (userId) => {
   try {
     const exams = await TotalUserExams.find({ purchasedBy: userId })
@@ -15,8 +14,6 @@ export const getTotalUserExams = async (userId) => {
     throw new Error("Failed to retrieve total user exams");
   }
 };
-
-// Service to get a single total user exam for the logged-in user
 export const getSingleTotalUserExams = async (userId, id) => {
   try {
     const exam = await TotalUserExams.findOne({

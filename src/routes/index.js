@@ -17,10 +17,8 @@ import expiredAccountRoute from "./Heroes.expiredaccounts.routes";
 import waittingAccountRoute from "./Heroes.waittingaccounts.routes";
 import waittingExamRoute from "./Heroes.waittingexams.routes";
 import responsesRoute from "./Heroes.responses.routes";
-import iremboRoute from "./Heroes.irembo.routes";
+import notificationsRoute from "./Heroes.notifications.routes";
 const router = express.Router();
-
-// Route
 
 router.use("/docs", docrouter);
 router.use("/users", userRoute);
@@ -41,6 +39,6 @@ router.use("/waittingexams", waittingExamRoute);
 router.use("/waittingaccounts", waittingAccountRoute);
 router.use("/expiredaccounts", expiredAccountRoute);
 router.use("/responses", responsesRoute);
-router.use("/irembo", iremboRoute);
+router.use("/notification", notificationsRoute);
 
 export default router;

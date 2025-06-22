@@ -1,6 +1,5 @@
 import FailledExams from "../models/Heroes.failedexams.models";
 
-// Service to get all failled exams for a logged-in user
 export const getUserFailledExams = async (userId) => {
   try {
     const exams = await FailledExams.find({ purchasedBy: userId })
@@ -16,7 +15,6 @@ export const getUserFailledExams = async (userId) => {
   }
 };
 
-// Service to get a single failled exam for the logged-in user
 export const getSingleUserFailledExams = async (userId, id) => {
   try {
     const exam = await FailledExams.findOne({

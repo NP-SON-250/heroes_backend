@@ -7,15 +7,26 @@ import {
   getAllUsers,
   getUserById,
   createUsers,
+  getLastWeekUsersCount,
+  getCurrentWeekUsersCount,
 } from "../controllers/Heroes.users.controllers";
 import fileUpload from "../helper/multer";
 import Users from "../models/Heroes.users.model";
 import { normal } from "../middleware/middleware";
 import bcrypt from "bcrypt";
+
 const userRoute = express.Router();
-userRoute.post("/", fileUpload.single("profile"), createUsers);
-userRoute.post("/auth", fileUpload.single("password"), login);
+
+// Static routes first
+userRoute.get("/last-week", getLastWeekUsersCount);
+userRoute.get("/current-week", getCurrentWeekUsersCount); 
+userRoute.get("/", getAllUsers);
+
+// Authentication routes
 userRoute.post("/auth/school", fileUpload.single("password"), loginSchools);
+userRoute.post("/auth", fileUpload.single("password"), login);
+
+// Password verification
 userRoute.post("/verify-password", normal, async (req, res) => {
   try {
     const userId = req.loggedInUser.id;
@@ -31,9 +42,13 @@ userRoute.post("/verify-password", normal, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// CRUD operations
+userRoute.post("/", fileUpload.single("profile"), createUsers);
 userRoute.put("/:id", fileUpload.single("profile"), updateUser);
 userRoute.delete("/:id", deleteUser);
-userRoute.get("/", getAllUsers);
+
+// Parameterized routes last
 userRoute.get("/:id", getUserById);
 
 export default userRoute;

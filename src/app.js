@@ -1,14 +1,12 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+
 dotenv.config();
+const DBconnector = mongoose.connect(process.env.MONGODB_URL).then(() => {
+  console.log("Database connected");
+})
+.catch((error) => {
+  console.log("Failed to Connect to database", error);
+});
 
-const dbConnector = mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => {
-    console.log(`DB connected ✅`);
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
-
-export default dbConnector;
+export default DBconnector;

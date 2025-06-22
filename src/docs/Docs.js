@@ -6,9 +6,9 @@ const docrouter = express.Router();
 const options = {
   openapi: "3.0.1",
   info: {
-    title: "Heroes Technology API",
+    title: "Heroes Expert API",
     version: "1.0.0",
-    description: "Documentation for Heroes Technology API.",
+    description: "Documentation for Heroes Expert API.",
   },
   basePath: "/",
   components: {
@@ -255,7 +255,7 @@ const options = {
                   },
                   role: {
                     type: "string",
-                    enum: ["student", "admin", "school"],
+                    enum: ["student", "admin", "school", "supperAdmin"],
                   },
                 },
               },
@@ -352,7 +352,7 @@ const options = {
                   },
                   role: {
                     type: "string",
-                    enum: ["student", "admin", "school"],
+                    enum: ["student", "admin", "school", "supperAdmin"],
                   },
                 },
               },
@@ -497,11 +497,11 @@ const options = {
         },
       },
     },
-    "/api/v1/exams/test/{number}": {
+    "/api/v1/exams/kora/{number}": {
       get: {
         tags: ["Exams"],
-        summary: "Read test exam By number",
-        description: "Get test exam by number",
+        summary: "Read kora exam By number",
+        description: "Get kora exam by number",
         parameters: [
           {
             name: "number",
@@ -1011,6 +1011,37 @@ const options = {
         responses: {
           200: {
             description: "All responses are retrieved",
+          },
+          500: {
+            description: "Internal Server Error",
+          },
+        },
+      },
+    },
+    "/api/v1/responses/supper{id}": {
+      delete: {
+        tags: ["Responses"],
+        summary: "Delete response",
+        description: "Delete an account",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Reponse deleted",
+          },
+          400: {
+            description: "Bad Request",
+          },
+          404: {
+            description: "Account not found",
           },
           500: {
             description: "Internal Server Error",

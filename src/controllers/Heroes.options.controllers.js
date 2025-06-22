@@ -4,7 +4,6 @@ import {
   validateUpdateOption,
 } from "../validation/Heroes.options.validation";
 
-// create option controller
 export const createOptions = async (req, res) => {
   const { error, value } = validateCreateOption(req.body);
   if (error) {
@@ -63,7 +62,6 @@ export const deletsOption = async (req, res) => {
     });
   }
 };
-// Display all option for question
 export const getAllOptions = async (req, res) => {
   try {
     const { question } = req.params;

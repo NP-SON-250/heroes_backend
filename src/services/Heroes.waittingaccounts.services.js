@@ -1,6 +1,5 @@
 import WaittingAccounts from "../models/Heroes.waittingaccounts.models";
 
-// Service to get all waitting accounts for a logged-in user
 export const getUserWaittingAccounts = async (userId) => {
   try {
     const accounts = await WaittingAccounts.find({ purchasedBy: userId })
@@ -15,8 +14,6 @@ export const getUserWaittingAccounts = async (userId) => {
     throw new Error("Failed to retrieve user waitting accounts");
   }
 };
-
-// Service to get a single waitting account for the logged-in user
 export const getSingleUserWaittingAccounts = async (userId, id) => {
   try {
     const account = await WaittingAccounts.findOne({

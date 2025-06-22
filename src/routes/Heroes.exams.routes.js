@@ -6,16 +6,26 @@ import {
   getExamById,
   deleteExam,
   getExamNumber,
+  getCurrentWeekExamsCount,
+  getLastWeekExamsCount,
 } from "../controllers/Heroes.exams.controllers";
 import fileUpload from "../helper/multer";
-import { admins } from "../middleware/middleware";
+import { supperAdmins } from "../middleware/middleware";
 
 const examRoute = express.Router();
+
+// Static routes first
+examRoute.get("/last-week", getLastWeekExamsCount);
+examRoute.get("/current-week", getCurrentWeekExamsCount);
+examRoute.get("/kora/:number", getExamNumber); 
+
+// CRUD operations
 examRoute.post("/", fileUpload.single("title"), createExamination);
-examRoute.put("/:id", fileUpload.single("title"), updateExam);
-examRoute.delete("/:id", deleteExam);
 examRoute.get("/", getAllExams);
+
+// Dynamic routes last
+examRoute.put("/:id", fileUpload.single("title"), updateExam);
 examRoute.get("/:id", getExamById);
-examRoute.get("/test/:number", getExamNumber);
+examRoute.delete("/:id", supperAdmins, deleteExam);
 
 export default examRoute;

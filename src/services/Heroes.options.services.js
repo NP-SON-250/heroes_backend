@@ -5,19 +5,14 @@ export const createOption = async (id, optionData, file) => {
   const { text, isCorrect } = optionData;
 
   try {
-    // 1. Check if the question exists
     const isQuestion = await Questions.findById(id);
     if (!isQuestion) {
       throw new Error("This question does not exist");
     }
-
-    // 2. Check if the option with same text already exists for the same question
     const textExist = await Options.findOne({ text, question: id });
     if (textExist) {
       throw new Error("Option already exists for this question");
     }
-
-    // 3. If isCorrect is true, ensure no other correct option exists for this question
     if (isCorrect === true) {
       const correctOptionExists = await Options.findOne({
         question: id,
@@ -27,15 +22,11 @@ export const createOption = async (id, optionData, file) => {
         throw new Error("A question cannot have more than one correct option");
       }
     }
-
-    // 4. Create the option
     const option = await Options.create({
       text,
       isCorrect,
       question: id,
     });
-
-    // 5. Update question with the new option ID
     await Questions.findByIdAndUpdate(
       id,
       { $push: { options: option._id } },
@@ -51,8 +42,6 @@ export const createOption = async (id, optionData, file) => {
     throw new Error(`Error creating option: ${error.message}`);
   }
 };
-
-// Service to update an option
 export const updateOption = async (id, optionData) => {
   const { text, isCorrect } = optionData;
 
@@ -61,8 +50,6 @@ export const updateOption = async (id, optionData) => {
     if (!optionExist) {
       throw new Error("Option not found");
     }
-
-    // Check if another option with the same text exists for the same question
     const duplicate = await Options.findOne({
       _id: { $ne: id },
       text,
@@ -72,8 +59,6 @@ export const updateOption = async (id, optionData) => {
     if (duplicate) {
       throw new Error("This option already exists");
     }
-
-    // If updating to true, ensure no other correct option exists in this question
     if (isCorrect === true && optionExist.isCorrect === false) {
       const anotherCorrect = await Options.findOne({
         _id: { $ne: id },
@@ -95,18 +80,14 @@ export const updateOption = async (id, optionData) => {
     throw new Error(`Error updating option: ${error.message}`);
   }
 };
-
-// Service to delete an option
 export const deleteOption = async (id) => {
   try {
     const isExist = await Options.findById(id);
     if (!isExist) {
       throw new Error("Option not found");
     }
-
-    // Remove the option ID from the corresponding question's options array
     await Questions.updateOne(
-      { _id: isExist.question }, // assumes each option has a `question` reference
+      { _id: isExist.question },
       { $pull: { options: id } }
     );
 
@@ -120,7 +101,6 @@ export const deleteOption = async (id) => {
     throw new Error(`Error deleting option: ${error.message}`);
   }
 };
-// Service to get all options for given question
 export const getAllOptions = async (question) => {
   try {
     const allOptions = await Options.find({ question: question });
@@ -129,7 +109,6 @@ export const getAllOptions = async (question) => {
     throw new Error(`Error retrieving options: ${error.message}`);
   }
 };
-// Service to get single option
 export const getOptionById = async (id) => {
   try {
     const option = await Options.findById(id);

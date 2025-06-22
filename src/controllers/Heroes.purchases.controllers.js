@@ -154,8 +154,7 @@ export const examByCode = async (req, res) => {
 //Admin
 export const getUserAdmin = async (req, res) => {
   try {
-    const userId = req.loggedInUser.id;
-    const purchases = await purchaseServices.getAdminPurchases(userId);
+    const purchases = await purchaseServices.getAdminPurchases();
 
     return res.status(200).json({
       status: "200",

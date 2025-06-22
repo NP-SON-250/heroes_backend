@@ -1,6 +1,5 @@
 import UnpaidAccounts from "../models/Heroes.unpaidaccounts.models";
 
-// Service to get all unpaid accounts for a logged-in user
 export const getUserUnpaidAccounts = async (userId) => {
   try {
     const accounts = await UnpaidAccounts.find({ purchasedBy: userId })
@@ -16,7 +15,6 @@ export const getUserUnpaidAccounts = async (userId) => {
   }
 };
 
-// Service to get a single unpaid account for the logged-in user
 export const getSingleUserUnpaidAccounts = async (userId, id) => {
   try {
     const account = await UnpaidAccounts.findOne({

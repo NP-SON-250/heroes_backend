@@ -3,8 +3,6 @@ import {
   validateCreateQueston,
   validateUpdateQuestion,
 } from "../validation/Heroes.questions.validation";
-
-// create question controller
 export const createQuestions = async (req, res) => {
   const { error, value } = validateCreateQueston(req.body);
   if (error) {
@@ -67,10 +65,9 @@ export const deletsQuestion = async (req, res) => {
     });
   }
 };
-// Display all questions for exam
 export const getAllQuestions = async (req, res) => {
   try {
-    const { exam } = req.params;
+    const {exam} = req.params;
     const questions = await questionService.getAllQuestions(exam);
     return res.status(200).json({
       status: "200",

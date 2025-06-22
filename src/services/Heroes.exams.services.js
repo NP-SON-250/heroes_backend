@@ -7,13 +7,13 @@ import PassedExams from "../models/Heroes.passedexams.models";
 import FailledExams from "../models/Heroes.failedexams.models";
 import ExpiredExams from "../models/Heroes.expiredexams.models";
 import TotalUserExams from "../models/Heroes.totaluserexams.models";
-// Service to get test exam wth number
+
 export const getExamByNumber = async (number) => {
   try {
-    const { type } = "Test" || "test";
+    const { type } = "kora" || "kora";
     const isExist = await Exams.findOne({
       number,
-      type: { $regex: /^test$/, $options: "i" },
+      type: { $regex: /^kora$/, $options: "i" },
     }).populate({
       path: "questions",
       populate: {
@@ -29,18 +29,15 @@ export const getExamByNumber = async (number) => {
     throw new Error(`Error retrieving exam: ${error.message}`);
   }
 };
-// Service to create exam
+
 export const createExam = async (examData) => {
   const { title, type, number, fees } = examData;
 
   try {
-    // Check if exam with same number and same type already exists
     const existingExam = await Exams.findOne({ number, type });
     if (existingExam) {
       throw new Error("This exam already exists with the same number and type");
     }
-
-    // Create the exam
     const exam = await Exams.create({
       title,
       type,
@@ -57,8 +54,6 @@ export const createExam = async (examData) => {
     throw new Error(`Error creating exam: ${error.message}`);
   }
 };
-
-// Service to update an exam
 export const updateExams = async (id, examData) => {
   const { type, number } = examData;
 
@@ -67,8 +62,6 @@ export const updateExams = async (id, examData) => {
     if (!examExist) {
       throw new Error("Exam not found");
     }
-
-    // If number is being updated (but not type)
     if (number && !type) {
       const duplicate = await Exams.findOne({
         number,
@@ -82,8 +75,6 @@ export const updateExams = async (id, examData) => {
         );
       }
     }
-
-    // If type is being updated (but not number)
     if (type && !number) {
       const duplicate = await Exams.findOne({
         type,
@@ -97,8 +88,6 @@ export const updateExams = async (id, examData) => {
         );
       }
     }
-
-    // If both type and number are being updated
     if (type && number) {
       const duplicate = await Exams.findOne({
         type,
@@ -120,8 +109,6 @@ export const updateExams = async (id, examData) => {
     throw new Error(`Error updating exam: ${error.message}`);
   }
 };
-
-// Service to delete an exam
 export const deleteExam = async (id) => {
   try {
     const isExist = await Exams.findById(id);
@@ -163,7 +150,6 @@ export const deleteExam = async (id) => {
     throw new Error(`Error deleting exam: ${error.message}`);
   }
 };
-// Service to get all exams
 export const getAllExams = async () => {
   try {
     const allExams = await Exams.find();
@@ -172,7 +158,7 @@ export const getAllExams = async () => {
     throw new Error(`Error retrieving exams: ${error.message}`);
   }
 };
-// Service to get single exam
+
 export const getExamById = async (id) => {
   try {
     const isExist = await Exams.findById(id).populate({

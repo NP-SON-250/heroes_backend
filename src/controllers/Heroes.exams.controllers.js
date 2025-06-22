@@ -1,3 +1,4 @@
+import Exams from "../models/Heroes.exams.models";
 import * as examsService from "../services/Heroes.exams.services";
 import {
   validateCreateExam,
@@ -110,6 +111,65 @@ export const getExamById = async (req, res) => {
       data: exam,
     });
   } catch (error) {
+    return res.status(500).json({
+      status: "500",
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getLastWeekExamsCount = async (req, res) => {
+  try {
+    const today = new Date();
+
+    const startOfFirstWeek = new Date(today);
+    startOfFirstWeek.setDate(today.getDate() - 14);
+    startOfFirstWeek.setHours(0, 0, 0, 0); 
+
+
+    const endOfFirstWeek = new Date(today);
+    endOfFirstWeek.setDate(today.getDate() - 7);
+    endOfFirstWeek.setHours(23, 59, 59, 999);
+
+    const count = await Exams.countDocuments({
+      createdAt: {
+        $gte: startOfFirstWeek,
+        $lte: endOfFirstWeek,
+      },
+    });
+
+    return res.status(200).json({
+      status: "200",
+      message: "Last week exams count",
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "500",
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getCurrentWeekExamsCount = async (req, res) => {
+  try {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const count = await Exams.countDocuments({
+      createdAt: { $gte: oneWeekAgo },
+    });
+
+    return res.status(200).json({
+      status: "200",
+      message: "Current week exams counts",
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({
       status: "500",
       message: "Internal server error",

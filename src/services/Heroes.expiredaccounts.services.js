@@ -1,6 +1,5 @@
 import ExpiredAccounts from "../models/Heroes.expiredaccounts.models";
 
-// Service to get all expired accounts for a logged-in user
 export const getUserExpiredAccounts = async (userId) => {
   try {
     const accounts = await ExpiredAccounts.find({ purchasedBy: userId })
@@ -15,8 +14,6 @@ export const getUserExpiredAccounts = async (userId) => {
     throw new Error("Failed to retrieve user expired accounts");
   }
 };
-
-// Service to get a single expired account for the logged-in user
 export const getSingleUserExpiredAccounts = async (userId, id) => {
   try {
     const account = await ExpiredAccounts.findOne({

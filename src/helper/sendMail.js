@@ -9,6 +9,7 @@ export const sendMail = (emailTemplate) => {
       pass: process.env.PasswordMailer,
     },
   });
+  //Mail options
   let mailOptions = {
     from: process.env.UserMailer,
     to: emailTo,

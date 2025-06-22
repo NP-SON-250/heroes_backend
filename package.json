@@ -13,7 +13,7 @@
   "repository": {
     "type": "git"
   },
-  "author": "Congozi Expert",
+  "author": "Heroes Expert",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.27.0",

@@ -10,7 +10,7 @@ cloudinary.config({
 export const uploadToCloud = async (file) => {
   try {
     const univeUploads = await cloudinary.uploader.upload(file.path, {
-      folder: "Congozi Images",
+      folder: "Heroes Images",
       use_filename: true,
     });
     return univeUploads;

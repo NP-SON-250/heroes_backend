@@ -1,6 +1,5 @@
 import ExpiredExams from "../models/Heroes.expiredexams.models";
 
-// Service to get all expired exams for a logged-in user
 export const getUserExpiredExams = async (userId) => {
   try {
     const exams = await ExpiredExams.find({ purchasedBy: userId })
@@ -15,8 +14,6 @@ export const getUserExpiredExams = async (userId) => {
     throw new Error("Failed to retrieve user expired exams");
   }
 };
-
-// Service to get a single expired exam for the logged-in user
 export const getSingleUserExpiredExams = async (userId, id) => {
   try {
     const exam = await ExpiredExams.findOne({
