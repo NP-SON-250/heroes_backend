@@ -1,4 +1,34 @@
 import Notify from "../models/Heroes.notifies.models";
+export const allData = async (req, res) => {
+  try {
+    const userId = req.loggedInUser.id;
+    const userRole = req.loggedInUser.role;
+
+    let allnotes;
+
+    if (userRole === "admin" || userRole === "supperAdmin") {
+      allnotes = await Notify.find({ status: "Under Review" });
+    } else {
+      allnotes = await Notify.find({
+        notifiedBy: userId,
+        status: "Access Granted",
+      }).sort({ createdAt: -1 });
+    }
+
+    return res.status(200).json({
+      status: "200",
+      message: "Notifications fetched",
+      data: allnotes,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: "500",
+      message: "Habayemo ikibazo",
+      error: error.message,
+    });
+  }
+};
 export const createNote = async (req, res) => {
   try {
     const userId = req.loggedInUser.id;
@@ -21,37 +51,6 @@ export const createNote = async (req, res) => {
       status: "200",
       message: "Kumenyekanisha inyemezabwishyu byakunze",
       data: createdNotes,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: "500",
-      message: "Habayemo ikibazo",
-      error: error.message,
-    });
-  }
-};
-
-export const allData = async (req, res) => {
-  try {
-    const userId = req.loggedInUser.id;
-    const userRole = req.loggedInUser.role;
-
-    let allnotes;
-
-    if (userRole === "admin" || userRole === "supperAdmin") {
-      allnotes = await Notify.find({ status: "Under Review" });
-    } else {
-      allnotes = await Notify.find({
-        notifiedBy: userId,
-        status: "Access Granted",
-      });
-    }
-
-    return res.status(200).json({
-      status: "200",
-      message: "Notifications fetched",
-      data: allnotes,
     });
   } catch (error) {
     console.log(error);
