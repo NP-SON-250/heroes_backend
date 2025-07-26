@@ -113,24 +113,6 @@ export const createUser = async (userData, file) => {
   }
 };
 
-// Service to Login a user with phone or email
-export const loginUser = async ({ identifier, password }) => {
-  const user = await Users.findOne({
-    $or: [{ email: identifier }, { phone: identifier }],
-  });
-
-  if (!user) {
-    throw new Error("User not found with provided credentials");
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error("Invalid password");
-  }
-
-  return user;
-};
-
 // Service to delete a user
 export const deleteUser = async (id) => {
   try {
