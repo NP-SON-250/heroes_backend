@@ -108,6 +108,7 @@ export const createUsers = async (req, res, file) => {
       tin,
       password: hashedPassword,
       profile: savedProfile,
+      role,
     };
     const user = await Users.create(newUserData);
 
@@ -126,13 +127,23 @@ export const createUsers = async (req, res, file) => {
   }
 };
 export const login = async (req, res) => {
-  const { error, value } = validateLoginUser(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
-
   try {
-    const user = await userService.loginUser(value);
+    const user = await Users.findOne({
+      $or: [{ email: identifier }, { phone: identifier }],
+    });
+    if (!user) {
+      return res.status(404).json({
+        status: "404",
+        message: "User name not found",
+      });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        status: "400",
+        message: "Invalid password",
+      });
+    }
     const token = generateToken(user._id);
     res.status(200).json({
       message: "Kwinjira byakunze",
@@ -226,7 +237,7 @@ export const getLastWeekUsersCount = async (req, res) => {
 
     const startOfLastWeek = new Date(today);
     startOfLastWeek.setDate(today.getDate() - 14);
-    startOfLastWeek.setHours(0, 0, 0, 0); 
+    startOfLastWeek.setHours(0, 0, 0, 0);
 
     const endOfLastWeek = new Date(today);
     endOfLastWeek.setDate(today.getDate() - 7);
